@@ -1,4 +1,4 @@
-#include "../src/commandParser.hpp"
+#include "../commandParser.hpp"
 #include <cstdio>
 
 int main(int argc, char **argv) {

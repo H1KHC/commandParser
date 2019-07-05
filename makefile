@@ -1,13 +1,11 @@
-STATIC_LIBRARY = lib/libcommandParser.a
-DYNAMIC_LIBRARY = bin/commandParser.dll
-IMPORT_LIBRARY = lib/libcommandParser.dll.a
+STATIC_LIBRARY = lib/libcommandParserCWrapper.a
 INSTALL_PREFIX = /usr/
 
 CXXFLAGS = -fPIC
 LINKFLAGS =
 
-HEADERS = $(wildcard src/*.h include/*.h)
-OBJECTS = $(patsubst src/%.cpp, %.o, $(wildcard src/*.cpp))
+HEADERS = $(wildcard *.h)
+OBJECTS = $(patsubst %.cpp, %.o, $(wildcard *.cpp))
 STATIC_OBJECTS = $(patsubst %.o, .build/static/%.o, $(OBJECTS))
 DYNAMIC_OBJECTS = $(patsubst %.o, .build/dynamic/%.o, $(OBJECTS))
 
@@ -19,39 +17,34 @@ CXXFLAGS += -O2
 LINKFLAGS += -O2
 endif
 
-.PHONY: all static dynamic install distclean clean directories
+.PHONY: all static example install distclean clean directories
 
-all: static dynamic
+all: static example
 
 static: directories $(STATIC_LIBRARY)
-
-dynamic: directories $(DYNAMIC_LIBRARY)
 
 install:
 	cp -r bin/* $(INSTALL_PREFIX)/bin/*
 	cp -r lib/* $(INSTALL_PREFIX)/lib/*
-	cp -r include/* $(INSTALL_PREFIX)/include/*
+	cp -r * $(INSTALL_PREFIX)/include/*
 
 distclean:
 	rm -rf .build
 
 clean: distclean
 	rm -rf lib bin
+	rm example/test
 
 directories:
-	mkdir -p .build lib bin .build/static .build/dynamic
+	mkdir -p .build lib .build/static .build/dynamic
 	
-example:
-	g++ -o test/test test/test.cpp
+example: example/test
+
+example/test:
+	g++ -o example/test example/test.cpp
 
 $(STATIC_LIBRARY): $(STATIC_OBJECTS)
 	$(AR) r $@ $^
 
-$(DYNAMIC_LIBRARY): $(DYNAMIC_OBJECTS)
-	$(CXX) -shared -o $@ $^ $(CXXFLAGS) -Wl,--out-implib=$(IMPORT_LIBRARY)
-
-.build/static/%.o: src/%.cpp $(HEADERS)
+.build/static/%.o: %.cpp $(HEADERS)
 	$(CXX) -c -o $@ $< $(CXXFLAGS) -DSTATIC_LIB
-
-.build/dynamic/%.o: src/%.cpp $(HEADERS)
-	$(CXX) -c -o $@ $< $(CXXFLAGS) -DLIB_IMPLEMENT
