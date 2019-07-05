@@ -5,7 +5,7 @@
 #include <cstring>
 
 template<class DATA, class TYPE = char, int T = (1 << (sizeof(TYPE) << 3))>
-struct Trie {
+class Trie {
 	struct Node {
 		Node *son[T];
 		DATA *pointer;
@@ -14,6 +14,7 @@ struct Trie {
 		}
 	} *root;
 
+public:
 	bool addString(const TYPE* str, DATA* pointer) {
 		Node *pt = root;
 		while(*str) {
@@ -70,7 +71,7 @@ struct Trie {
 };
 
 
-typedef struct CommandParser {
+typedef class CommandParser {
 	typedef struct Value {
 		bool appeared;
 		int max;
@@ -82,6 +83,7 @@ typedef struct CommandParser {
 	Trie<Value> ValueTrie;
 	Value unmatched;
 
+public:
 	bool addOption(int maxCount, const char *valueName,
 				   const char *Short, const char *Long) {
 		if(*Short == '-' || *valueName == '\0' ||

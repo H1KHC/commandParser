@@ -15,38 +15,35 @@ It is cross-platform, light-weighted(especially when using C++) and easy-used.
 
 ### Usage
 
->
-> If you are using C++, you can just include the hpp file and use the class directly.
->
+This is an example in language C. For the example in language C++, you can check the `test.cpp` in example folder.
 
-Firstly, you need to create a parser:
+First, you need to create a parser(File inclusion is ignored):
 
 ```cpp
-CommandParser* createCommandParser(void);
+// CommandParser* createCommandParser(void);
+
 CommandParser *parser = createCommandParser();
 ```
 
 
-
-Then, add some options into it:
+Second, add some options into it:
 
 ```cpp
-bool addOption(CommandParser *parser, int maxCount, const char *valueName, const char *Short, const char *Long);
-
-// The parameter "Long" can be ignored
-// maxCount can be any negative integer, which means infinity
+// bool addOption(CommandParser *parser, int maxCount, const char *valueName, const char *Short, const char *Long);
 
 addOption(parser, 0, "help", "h", "help");
+
 addOption(parser, 1, "i", "input", "input");
+// Either short or long parameter can be ignored, but you cannot ignore both (Of course I can't!)
+
 addOption(parser, -1, "o", "output", "output option");
+// maxCount can be any negative integer, which means infinity
 ```
 
-
-
-After that, you can parse the options:
+Third, you can parse the options:
 
 ```cpp
-int  parse(CommandParser *parser, int argc, char **argv);
+// int  parse(CommandParser *parser, int argc, char **argv);
 
 if(parse(parser, argc, argv)) {
     cout <<"Parse failed\n";
@@ -54,18 +51,20 @@ if(parse(parser, argc, argv)) {
 }
 ```
 
-
-
-And get results:
+And forth, get results:
 
 ```cpp
-bool hasOption  (CommandParser *parser, const char *valueName);
-bool checkOption(CommandParser *parser, const char *valueName); // will crash if name not found
-int  countOption(CommandParser *parser, const char *valueName);
-int  getOption  (CommandParser *parser, const char *valueName, char ***container);
-// for the parameter "container" in c style function, you need to pass a container's address
+// bool hasOption  (CommandParser *parser, const char *valueName);
+
+// bool checkOption(CommandParser *parser, const char *valueName);
+    // will crash if name not found
+
+// int  countOption(CommandParser *parser, const char *valueName);
+// int  getOption  (CommandParser *parser, const char *valueName, char ***container);
+// for the parameter "container" you need to pass the address of a char** variable
+
 // return value is the count of the options
-// you don't need to free the container, it will be free once deleted the parser
+// you don't need to and shouldn't free the container, as it will be free once the parser is deleted
 
 if(checkOption(parser, "help"))
 	cout <<"Help flag is set" <<endl;
@@ -83,12 +82,10 @@ if(count)
 else cout <<"Output string isn't set" <<endl;
 ```
 
-
-
-In the end, you can at any time delete it:
+In the end, you can delete the parser at any time:
 
 ```cpp
-void eraseCommandParser(CommandParser * parser);
+// void eraseCommandParser(CommandParser * parser);
 
 eraseCommandParser(parser);
 ```

@@ -35,3 +35,8 @@ lib/
 *.exe
 *.out
 *.app
+
+# Additional exclusions
+/example/test
+/CommandParser.vcxproj.user
+/CommandParser.vcxproj

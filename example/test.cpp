@@ -2,11 +2,17 @@
 #include <cstdio>
 
 int main(int argc, char **argv) {
+	// First, create a parser
     CommandParser *parser = new CommandParser;
-    parser->addOption(2, "add", "a", "add");
+
+	// Second, add some options into it
+	parser->addOption(2, "add", "a", "add");
     parser->addOption(0, "x", "x", "xx");
+
+	// Third, parse the arg
     parser->parse(argc, argv);
 
+	// Forth, get the results
     printf("Flag x is%s set.\n", parser->checkOption("x") ? "" : "n't");
 
     const char **options;
@@ -19,6 +25,9 @@ int main(int argc, char **argv) {
     printf("And %d unmatched options%c\n", c, c ? ':' : '.');
     for(int i = 0; i < c; ++i)
         printf("\t%s\n", options[i]);
+
+	// And fifth, delete the parser
+	delete parser;
 }
 
 /*
