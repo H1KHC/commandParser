@@ -1,5 +1,6 @@
 # Dictionaries
 .build/
+.vs/
 .vscode/
 bin/
 lib/
@@ -37,6 +38,5 @@ lib/
 *.out
 *.app
 
-# Additional exclusions
-/CommandParser.vcxproj.user
-/CommandParser.vcxproj
+# VS Projects
+*.vcxproj*

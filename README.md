@@ -2,20 +2,19 @@
 
 Command parser is a C/C++ library that can help us parse command easily.
 
-It is cross-platform, light-weighted(especially when using C++) and easy-used.
+It is cross-platform, light-weighted(especially when using C++) and easily-used.
 
 
 ### Build
 
 1. `cd` into the library's directory
-2. `make [(all|static|dynamic)] [example] [DEBUG=true]`
-3. If necessary, `make install [INSTALL_PREFIX=...]`
-
+2. `cmake .` or more frequently `mkdir .build && cd .build && cmake ..`
+3. `make`
 
 
 ### Usage
 
-This is an example in language C. For the example in language C++, you can check the `test.cpp` in example folder.
+This is an example in language C. For the example files in language C and C++, you can check the `test.c` or `test.cpp` in example folder.
 
 First, you need to create a parser(File inclusion is ignored):
 
