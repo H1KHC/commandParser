@@ -6,8 +6,8 @@ int main(int argc, char **argv) {
     CommandParser *parser = new CommandParser;
 
 	// Second, add some options into it
-	parser->addOption(2, "add", "a", "add");
-    parser->addOption(0, "x", "x", "xx");
+	parser->addOption(2, "add", "a", "add", "flag add");
+    parser->addOption(0, "x", "x", "xx", "flag x");
 
 	// Third, parse the arg
     parser->parse(argc, argv);

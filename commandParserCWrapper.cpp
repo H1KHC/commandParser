@@ -1,3 +1,12 @@
+/**
+ * @file commandParserCWrapper.cpp
+ * @author H1MSK (ksda47832338@outlook.com)
+ * @version 0.0.2
+ * @date 2019-08-16
+ * 
+ * @copyright Copyright (c) 2018-2019 H1MSK
+ * 
+ */
 #include "commandParser.hpp"
 
 extern "C" CommandParser* createCommandParser(void) {
@@ -27,6 +36,13 @@ extern "C" int  getOption  (CommandParser *parser, const char *valueName,
 	return parser->getOption(valueName, container);
 }
 
+extern "C" void setUsage(CommandParser *parser, const char *usageDescription) {
+	parser->setUsage(usageDescription);
+}
+
+extern "C" const char* getHelpString(CommandParser *parser) {
+	return parser->getHelpString();
+}
 
 extern "C" void eraseCommandParser(CommandParser * parser) {
 	delete parser;

@@ -1,11 +1,25 @@
-#ifndef __H_COMMAND_PARSER_HPP__
-#define __H_COMMAND_PARSER_HPP__
+/**
+ * @file commandParser.hpp
+ * @author H1MSK (ksda47832338@outlook.com)
+ * @version 0.0.2
+ * @date 2019-08-13
+ * 
+ * homepage at https://github.com/H1KHC/CommandParser
+ * 
+ * @copyright Copyright (c) 2019 H1MSK
+ * 
+ */
+
+#ifndef __H_COMMAND_PARSER_HPP___
+#define __H_COMMAND_PARSER_HPP___
 
 #include <vector>
+#include <string>
+#include <sstream>
 #include <cstring>
 
 template<class DATA, class TYPE = char, int T = (1 << (sizeof(TYPE) << 3))>
-class Trie {
+class CommandParserData {
 	struct Node {
 		Node *son[T];
 		DATA *pointer;
@@ -64,8 +78,8 @@ public:
 		delete x;
 	}
 
-	Trie() : root(new Node) {}
-	~Trie() {
+	CommandParserData() : root(new Node) {}
+	~CommandParserData() {
 		recycleTree(root);
 	}
 };
@@ -79,20 +93,28 @@ typedef class CommandParser {
 		bool full() { return container.size() >= (unsigned)max; }
 		Value(int _max) : appeared(false), max(_max) { if(max < 0) max = 0x7FFFFFFF; }
 	} Value;
-	Trie<Value> ShortCommand, LongCommand;
-	Trie<Value> ValueTrie;
+	CommandParserData<Value> ShortCommand, LongCommand;
+	CommandParserData<Value> ValueTrie;
 	Value unmatched;
+	std::stringstream helpStringStream;
+	std::string helpString;
 
 public:
 	bool addOption(int maxCount, const char *valueName,
-				   const char *Short, const char *Long) {
+				   const char *Short, const char *Long,
+				   const char* Description = "") {
+
 		if(*Short == '-' || *valueName == '\0' ||
 		  (*Short == '\0' && *Long == '\0'))
 			return false;
+		
 		Value *value = new Value(maxCount);
 		if(*Short) ShortCommand.addString(Short, value);
 		if(*Long) LongCommand.addString(Long, value);
 		ValueTrie.addString(valueName, value);
+		
+		helpStringStream <<"\n  " <<Short <<'\t' <<Long << '\t' <<Description;
+
 		return true;
 	}
 
@@ -107,7 +129,7 @@ public:
 			else {
 				bool longOption = argv[i][1] == '-';
 				char *beg = argv[i] + 1 + (longOption);
-				Trie<Value>*trie = (longOption) ? &LongCommand : &ShortCommand;
+				CommandParserData<Value>*trie = (longOption) ? &LongCommand : &ShortCommand;
 				Value *pointer;
 				const char *end = trie->findString(beg, pointer);
 
@@ -169,7 +191,20 @@ public:
 		return pointer->container.size();
 	}
 
-	CommandParser() : unmatched(0x7FFFFFFF) {}
+	void setUsage(const char *usageDescription) {
+		helpString = std::string(usageDescription);
+	}
+
+	const char *getHelpString() {
+		helpString += helpStringStream.str();
+		return helpString.c_str();
+	}
+
+	CommandParser(const std::string& description = "")
+	  : unmatched(0x7FFFFFFF)
+	{
+		helpStringStream << description << "\nShort\tLong\tDescription";
+	}
 } CommandParser;
 
-#endif
+#endif  // __H_COMMAND_PARSER_HPP___
